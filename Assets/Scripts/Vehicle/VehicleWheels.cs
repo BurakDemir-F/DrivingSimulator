@@ -11,11 +11,10 @@ public class VehicleWheels : MonoBehaviour
     [field: SerializeField] public Wheel BackLeft{ get; set; }
     [field: SerializeField] public Wheel BackRight{ get; set; }
 
-    private List<WheelType> _wheelsInTheAir = new();
     private Dictionary<WheelType, Wheel> _wheelDict;
-    private List<WheelType> _leftAirWheels = new();
-    private List<WheelType> _rightAirWheels = new();
-    private List<WheelType> _randomSideWheels = new();
+    public Dictionary<WheelType, Wheel> WheelDictionary => _wheelDict;
+    public List<WheelType> RightWheels { get; private set; }
+    public List<WheelType> LeftWheels { get; private set; }
     public void Construct()
     {
         _wheelDict = new Dictionary<WheelType, Wheel>(4);
@@ -23,6 +22,9 @@ public class VehicleWheels : MonoBehaviour
         _wheelDict.Add(WheelType.Fr,FrontRight);
         _wheelDict.Add(WheelType.Bl,BackLeft);
         _wheelDict.Add(WheelType.Br,BackRight);
+
+        RightWheels = new List<WheelType>() { WheelType.Br, WheelType.Fr };
+        LeftWheels = new List<WheelType>() { WheelType.Bl, WheelType.Fl };
     } 
     
     public void GiveDirection(float direction)
@@ -47,85 +49,6 @@ public class VehicleWheels : MonoBehaviour
     }
 
     public Wheel GetWheel(WheelType type) => _wheelDict[type];
-
-    public IEnumerable<WheelType> GetWheelsInTheAir(float airLimit)
-    {
-        _wheelsInTheAir.Clear();
-        foreach (var (wheelType, wheel) in _wheelDict)
-        {
-            var wheelCollider = wheel.Collider;
-            if (wheelCollider.isGrounded)
-                continue;
-
-            var wheelPos = wheelCollider.transform.position;
-            var wheelDown = (wheelCollider.transform.position + Vector3.down);
-
-            if (!Physics.Raycast(wheelPos, wheelDown, out var hitInfo, airLimit))
-            {
-                _wheelsInTheAir.Add(wheelType);
-            }
-        }
-        
-        return _wheelsInTheAir;
-    }
-
-    public IEnumerable<WheelType> GetAirSideWheels(float airLimit)
-    {
-        GetWheelsInTheAir(airLimit);
-        if (_wheelsInTheAir.Count == 4)
-        {
-            _randomSideWheels.Clear();
-            var randomSide = Random.Range(0, 100) % 2 == 0 ? WheelSide.Left : WheelSide.Right;
-            foreach (var wheelType in _wheelsInTheAir)
-            {
-                var wheel = GetWheel(wheelType);
-                if (wheel.Side == randomSide)
-                {
-                    _randomSideWheels.Add(wheelType);
-                }
-            }
-
-            return _randomSideWheels;
-        }
-
-        if (_wheelsInTheAir.Count == 3)
-        {
-             _leftAirWheels.Clear();
-             _rightAirWheels.Clear();
-            foreach (var wheelType in _wheelsInTheAir)
-            {
-                var wheel = GetWheel(wheelType);
-                var list = wheel.Side == WheelSide.Left ? _leftAirWheels : _rightAirWheels;
-                list.Add(wheelType);
-            }
-
-            return _leftAirWheels.Count > _rightAirWheels.Count ? _leftAirWheels : _rightAirWheels;
-        }
-
-        if (_wheelsInTheAir.Count == 2)
-        {
-            var firstWheel = _wheelsInTheAir[0];
-            var secondWheel = _wheelsInTheAir[1];
-            return GetWheel(firstWheel).Side == GetWheel(secondWheel).Side
-                ? _wheelsInTheAir
-                : new List<WheelType>() { _wheelsInTheAir[Random.Range(0, 2)] };
-        }
-
-        return _wheelsInTheAir;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if(_wheelDict == null)
-            return;
-        var airSideWheels = GetAirSideWheels(0.5f);
-        Gizmos.color = Color.yellow;
-        foreach (var airSideWheel in airSideWheels)
-        {
-            var wheel = GetWheel(airSideWheel);
-            Gizmos.DrawSphere(wheel.Collider.transform.position,1f);
-        }
-    }
 }
 
 public enum WheelSide

@@ -13,8 +13,8 @@ namespace Vehicle.Data
         [SerializeField] private float _maxReturnValue;
         [SerializeField] private float _preventTurnoverForce;
         [SerializeField] private float _airLimit;
-        [SerializeField] private WheelFrictionValues _forwardFriction;
-        [SerializeField] private WheelFrictionValues _sideWayFriction;
+        // [SerializeField] private WheelFrictionValues _forwardFriction;
+        // [SerializeField] private WheelFrictionValues _sideWayFriction;
         
         public float Mass => _mass;
         public float ForwardMotorTorque => _forwardMotorTorque;
@@ -23,8 +23,8 @@ namespace Vehicle.Data
         public float PreventTurnoverForce => _preventTurnoverForce;
         public float AirLimit => _airLimit;
         public float BrakeTorque => brakeTorque;
-        public WheelFrictionValues ForwardFriction => _forwardFriction;
-        public WheelFrictionValues SideWayFriction => _sideWayFriction;
+        // public WheelFrictionValues ForwardFriction => _forwardFriction;
+        // public WheelFrictionValues SideWayFriction => _sideWayFriction;
     }
 
     [System.Serializable]

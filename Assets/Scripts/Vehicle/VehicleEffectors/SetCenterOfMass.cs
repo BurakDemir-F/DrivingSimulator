@@ -11,7 +11,8 @@ namespace Vehicle.VehicleEffectors
             _rb.centerOfMass = _centerOfMass;
         }
 
-        public override void ApplyEffect()
+        public override void ApplyEffect(ref float horizontalAxis, ref float verticalAxis, ref bool isBrake,
+            ref float steerAngle, ref float forwardTorque,ref float backwardTorque)
         {
             
         }

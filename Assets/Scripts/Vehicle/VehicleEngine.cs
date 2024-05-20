@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Inputs;
 using UnityEngine;
+using Vehicle;
 using Vehicle.Data;
+using Vehicle.VehicleCheckers;
 using Vehicle.VehicleEffectors;
 
 public class VehicleEngine : MonoBehaviour
@@ -11,7 +13,9 @@ public class VehicleEngine : MonoBehaviour
     [SerializeField] private VehicleWheels _wheels;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private InputProvider _inputProvider;
+    [SerializeField] private VehicleEventBus _eventBus;
     [SerializeField] private List<VehicleEffector> _effectors;
+    [SerializeField] private List<VehicleChecker> _checkers;
 
     public event Action OnCrash;
     
@@ -36,7 +40,7 @@ public class VehicleEngine : MonoBehaviour
         _wheels.Construct();
         foreach (var vehicleEffector in _effectors)
         {
-            vehicleEffector.Initialize(_wheels,_rigidbody,_vehicleData);
+            vehicleEffector.Initialize(_wheels,_rigidbody,_vehicleData,_eventBus);
             vehicleEffector.Activate();
         }
     }
@@ -55,16 +59,22 @@ public class VehicleEngine : MonoBehaviour
         var horizontalAxis = _inputProvider.HorizontalAxis;
         var verticalAxis = _inputProvider.VerticalAxis;
         var isBrake = _inputProvider.IsBrake;
-        var steerAngle = horizontalAxis * _vehicleData.MaxReturnValue;
+        var steerAngle = _vehicleData.MaxReturnValue;
+        var forwardTorque = _vehicleData.ForwardMotorTorque;
+        var backwardTorque = _vehicleData.BackwardMotorTorque;
+        
+        foreach (var vehicleEffector in _effectors)
+            vehicleEffector.ApplyEffect(ref horizontalAxis, ref verticalAxis, ref isBrake, ref steerAngle,
+                ref forwardTorque, ref backwardTorque);
+        
+        steerAngle = horizontalAxis * _vehicleData.MaxReturnValue;
         var torque = verticalAxis > 0
-            ? verticalAxis * _vehicleData.ForwardMotorTorque
-            : verticalAxis * _vehicleData.BackwardMotorTorque;
+            ? verticalAxis * forwardTorque
+            : verticalAxis * backwardTorque;
+        
         _wheels.GiveDirection(steerAngle);
         _wheels.ApplyTorque(torque);
         _wheels.ApplyBreak(isBrake ? _vehicleData.BrakeTorque : 0f);
-        
-        foreach (var vehicleEffector in _effectors)
-            vehicleEffector.ApplyEffect();
     }
 
     public void SetWheels(VehicleWheels wheels) => _wheels = wheels;

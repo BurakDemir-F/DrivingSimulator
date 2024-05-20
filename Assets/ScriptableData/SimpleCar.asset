@@ -13,15 +13,9 @@ MonoBehaviour:
   m_Name: SimpleCar
   m_EditorClassIdentifier: 
   _mass: 1000
-  _forwardMotorTorque: 600
-  _backwardMotorTorque: 400
-  brakeTorque: 800
+  _forwardMotorTorque: 1500
+  _backwardMotorTorque: 1200
+  brakeTorque: 1200
   _maxReturnValue: 20
   _preventTurnoverForce: 5000
   _airLimit: 0.7
-  _forwardFriction:
-    asymptoteValue: 0
-    extremumValue: 0
-  _sideWayFriction:
-    asymptoteValue: 0
-    extremumValue: 10000
