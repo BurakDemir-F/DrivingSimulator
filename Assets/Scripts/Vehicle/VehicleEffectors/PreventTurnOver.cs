@@ -6,7 +6,6 @@ namespace Vehicle.VehicleEffectors
 {
     public class PreventTurnOver : VehicleEffector
     {
-        private readonly List<WheelType> _wheelsInTheAir = new();
         private readonly List<WheelType> _leftAirWheels = new();
         private readonly List<WheelType> _rightAirWheels = new();
 
@@ -36,15 +35,15 @@ namespace Vehicle.VehicleEffectors
 
         public IEnumerable<WheelType> GetAirSideWheels(float airLimit)
         {
-            GetWheelsInTheAir(airLimit);
-            if (_wheelsInTheAir.Count == 4)
-                return GetHighestTwoWheel(_wheelsInTheAir);
+            var wheelsInTheAir = _wheels.GetWheelsInTheAir(airLimit);
+            if (wheelsInTheAir.Count == 4)
+                return GetHighestTwoWheel(wheelsInTheAir);
 
-            if (_wheelsInTheAir.Count == 3)
+            if (wheelsInTheAir.Count == 3)
             {
                 _leftAirWheels.Clear();
                 _rightAirWheels.Clear();
-                foreach (var wheelType in _wheelsInTheAir)
+                foreach (var wheelType in wheelsInTheAir)
                 {
                     var wheel = _wheels.GetWheel(wheelType);
                     var list = wheel.Side == WheelSide.Left ? _leftAirWheels : _rightAirWheels;
@@ -54,37 +53,16 @@ namespace Vehicle.VehicleEffectors
                 return _leftAirWheels.Count > _rightAirWheels.Count ? _leftAirWheels : _rightAirWheels;
             }
 
-            if (_wheelsInTheAir.Count == 2)
+            if (wheelsInTheAir.Count == 2)
             {
-                var firstWheel = _wheelsInTheAir[0];
-                var secondWheel = _wheelsInTheAir[1];
+                var firstWheel = wheelsInTheAir[0];
+                var secondWheel = wheelsInTheAir[1];
                 return _wheels.GetWheel(firstWheel).Side == _wheels.GetWheel(secondWheel).Side
-                    ? _wheelsInTheAir
-                    : new List<WheelType>() { _wheelsInTheAir[Random.Range(0, 2)] };
+                    ? wheelsInTheAir
+                    : new List<WheelType>() { wheelsInTheAir[Random.Range(0, 2)] };
             }
 
-            return _wheelsInTheAir;
-        }
-
-        public IEnumerable<WheelType> GetWheelsInTheAir(float airLimit)
-        {
-            _wheelsInTheAir.Clear();
-            foreach (var (wheelType, wheel) in _wheels.WheelDictionary)
-            {
-                var wheelCollider = wheel.Collider;
-                if (wheelCollider.isGrounded)
-                    continue;
-
-                var wheelPos = wheelCollider.transform.position;
-                var wheelDown = (wheelCollider.transform.position + Vector3.down);
-
-                if (!Physics.Raycast(wheelPos, wheelDown, out var hitInfo, airLimit))
-                {
-                    _wheelsInTheAir.Add(wheelType);
-                }
-            }
-
-            return _wheelsInTheAir;
+            return wheelsInTheAir;
         }
 
         private List<WheelType> GetHighestTwoWheel(List<WheelType> airWheels)

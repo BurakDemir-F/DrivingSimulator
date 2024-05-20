@@ -13,6 +13,7 @@ namespace Vehicle.Data
         [SerializeField] private float _maxReturnValue;
         [SerializeField] private float _preventTurnoverForce;
         [SerializeField] private float _airLimit;
+        [SerializeField] private float _crashDuration;
         // [SerializeField] private WheelFrictionValues _forwardFriction;
         // [SerializeField] private WheelFrictionValues _sideWayFriction;
         
@@ -23,6 +24,8 @@ namespace Vehicle.Data
         public float PreventTurnoverForce => _preventTurnoverForce;
         public float AirLimit => _airLimit;
         public float BrakeTorque => brakeTorque;
+
+        public float CrashDuration => _crashDuration;
         // public WheelFrictionValues ForwardFriction => _forwardFriction;
         // public WheelFrictionValues SideWayFriction => _sideWayFriction;
     }

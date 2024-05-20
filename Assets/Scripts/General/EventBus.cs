@@ -74,7 +74,7 @@ namespace General
         }
     }
 
-    public class EventBusData : EventArgs
+    public class EventBusData
     {
         
     }

@@ -12,6 +12,8 @@ public class VehicleWheels : MonoBehaviour
     [field: SerializeField] public Wheel BackRight{ get; set; }
 
     private Dictionary<WheelType, Wheel> _wheelDict;
+    private readonly List<WheelType> _wheelsInTheAir = new();
+    
     public Dictionary<WheelType, Wheel> WheelDictionary => _wheelDict;
     public List<WheelType> RightWheels { get; private set; }
     public List<WheelType> LeftWheels { get; private set; }
@@ -49,6 +51,44 @@ public class VehicleWheels : MonoBehaviour
     }
 
     public Wheel GetWheel(WheelType type) => _wheelDict[type];
+    
+    public List<WheelType> GetWheelsInTheAir(float airLimit)
+    {
+        _wheelsInTheAir.Clear();
+        foreach (var (wheelType, wheel) in _wheelDict)
+        {
+            var wheelCollider = wheel.Collider;
+            if (wheelCollider.isGrounded)
+                continue;
+
+            var wheelPos = wheelCollider.transform.position;
+            var wheelDown = (wheelCollider.transform.position + Vector3.down);
+
+            if (!Physics.Raycast(wheelPos, wheelDown, out var hitInfo, airLimit))
+            {
+                _wheelsInTheAir.Add(wheelType);
+            }
+        }
+
+        return _wheelsInTheAir;
+    }
+
+    public void Deactivate()
+    {
+        foreach (var (type, wheel) in _wheelDict)
+        {
+            wheel.Collider.enabled = false;
+        }
+    }
+    
+    
+    public void Activate()
+    {
+        foreach (var (type, wheel) in _wheelDict)
+        {
+            wheel.Collider.enabled = true;
+        }
+    }
 }
 
 public enum WheelSide

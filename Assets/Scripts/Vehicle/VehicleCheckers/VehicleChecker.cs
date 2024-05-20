@@ -29,7 +29,7 @@ namespace Vehicle.VehicleCheckers
             _isActivated = true;
         }
 
-        public virtual void Deactivate()
+        public virtual void DeActivate()
         {
             _isActivated = false;
         }
