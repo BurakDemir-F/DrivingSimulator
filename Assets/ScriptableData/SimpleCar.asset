@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fdfeca046e421195899fb1d26d7bd8, type: 3}
+  m_Name: SimpleCar
+  m_EditorClassIdentifier: 
+  _mass: 1000
+  _forwardMotorTorque: 600
+  _backwardMotorTorque: 400
+  brakeTorque: 800
+  _maxReturnValue: 20
+  _preventTurnoverForce: 5000
+  _airLimit: 0.7
+  _forwardFriction:
+    asymptoteValue: 0
+    extremumValue: 0
+  _sideWayFriction:
+    asymptoteValue: 0
+    extremumValue: 10000
