@@ -67,7 +67,7 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
         }
     }
 
-    private void Activate()
+    public void Activate()
     {
         foreach (var vehicleEffector in _effectors)
             vehicleEffector.Activate();
@@ -76,7 +76,7 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
             vehicleChecker.Activate();
     }
     
-    private void DeActivate()
+    public void DeActivate()
     {
         foreach (var vehicleEffector in _effectors)
             vehicleEffector.DeActivate();
@@ -134,10 +134,6 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
 
     public void PrepareReanimation()
     {
-        foreach (var col in _collliders)
-        {
-            col.enabled = false;
-        }
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.useGravity = false;
         _rigidbody.isKinematic = true;
@@ -146,13 +142,29 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
 
     public void HandleReAnimationEnd()
     {
-        foreach (var col in _collliders)
-        {
-            col.enabled = true;
-        }
         _rigidbody.isKinematic = false;
         _rigidbody.useGravity = true;
         _rigidbody.gameObject.SetActive(true);
         _wheels.Activate();
+    }
+
+    public Vector3 GetPosition()
+    {
+        return _rigidbody.position;
+    }
+
+    public Quaternion GetRotation()
+    {
+        return _rigidbody.rotation;
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        _rigidbody.position = position;
+    }
+
+    public void SetRotation(Quaternion rotation)
+    {
+        _rigidbody.rotation = rotation;
     }
 }

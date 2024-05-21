@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/LowPolyMegapolis_URP/Scenes/LowPolyMegapolis_Demo.unity
+    guid: 0413136a8a0aa604c84c63437a4ab9c9
   m_configObjects: {}

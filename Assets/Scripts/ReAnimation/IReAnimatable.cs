@@ -6,6 +6,9 @@ namespace ReAnimatable
     {
         void PrepareReanimation();
         void HandleReAnimationEnd();
-        Transform ReAnimateTransform { get; } 
+        Vector3 GetPosition();
+        Quaternion GetRotation();
+        void SetPosition(Vector3 position);
+        void SetRotation(Quaternion rotation);
     }
 }

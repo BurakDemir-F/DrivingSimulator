@@ -9,7 +9,6 @@ namespace ReAnimatable
         [SerializeField] private float _reAnimateDuration = 1f;
         [SerializeField] private float _updateSnapShotDuration = .1f;
         [SerializeField] private int _initialSnapShotAmount = 20;
-        [SerializeField] private VehicleEngine _vehicle;
         private IReAnimatable _reAnimatable;
         private LinkedList<TransformSnapShot> _snapShots = new();
         private bool _isActivated;
@@ -27,32 +26,19 @@ namespace ReAnimatable
             _reAnimatable = reAnimatable;
         }
 
-        private void Awake()
-        {
-            SetReAnimatable(_vehicle);
-            Activate();
-        }
-
         public void Activate()
         {
-            _vehicle.OnCrash += OnVehicleCrashed;
             _isActivated = true;
         }
 
         public void Deactivate()
         {
-            _vehicle.OnCrash -= OnVehicleCrashed;
             _isActivated = false;
         }
 
         public void ReAnimate()
         {
             _isAnimating = true;
-        }
-
-        private void OnVehicleCrashed()
-        {
-            ReAnimate();
         }
 
         private void Update()
@@ -75,9 +61,8 @@ namespace ReAnimatable
 
         private void UpdateSnapShots()
         {
-            var animTransform = _reAnimatable.ReAnimateTransform;
             _snapShots.AddFirst(new TransformSnapShot()
-                { Position = animTransform.position, Rotation = animTransform.rotation, IsConstructed = true });
+                { Position = _reAnimatable.GetPosition(), Rotation = _reAnimatable.GetRotation(), IsConstructed = true });
             Debug.Log($"new item added to snapshots, count:{_snapShots.Count}");
             
             if(_snapShots.Count >= _initialSnapShotAmount)
@@ -104,13 +89,15 @@ namespace ReAnimatable
                 var fromToDistance = Vector3.Distance(_from.Position, _to.Position);
                 var fromToDuration = fromToDistance / speed;
                 _fromToCounter += Time.deltaTime;
-                var animTransform = _reAnimatable.ReAnimateTransform;
 
                 if (_fromToCounter >= fromToDuration)
                 {
                     if (_to == _snapShots.Last.Value)
                     {
-                        animTransform.position = _to.Position;
+                        _reAnimatable.SetPosition(_to.Position);
+                        _reAnimatable.SetRotation(_to.Rotation);
+                        _from.IsConstructed = false;
+                        _to.IsConstructed = false;
                         _isAnimating = false;
                         _fromToCounter = 0f;
                         _snapShots.Clear();
@@ -126,9 +113,11 @@ namespace ReAnimatable
                 }
                 else
                 {
-                    var lerpValue = _fromToCounter / fromToDuration;
-                    animTransform.position = Vector3.Lerp(_from.Position, _to.Position, lerpValue);
-                    animTransform.rotation = Quaternion.Lerp(_from.Rotation, _to.Rotation, lerpValue);
+                    var movementLerp = _fromToCounter / fromToDuration;
+                    var newPosition = Vector3.Lerp(_from.Position, _to.Position, movementLerp);
+                    var newRotation = Quaternion.Lerp(_from.Rotation, _to.Rotation, movementLerp);
+                    _reAnimatable.SetPosition(newPosition);
+                    _reAnimatable.SetRotation(newRotation);
                 }
             }
         }
