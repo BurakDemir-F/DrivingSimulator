@@ -18,12 +18,31 @@ namespace Vehicle.Data
         // [SerializeField] private WheelFrictionValues _sideWayFriction;
         
         public float Mass => _mass;
-        public float ForwardMotorTorque => _forwardMotorTorque;
-        public float BackwardMotorTorque => _backwardMotorTorque;
+        public float ForwardMotorTorque
+        {
+            get => _forwardMotorTorque;
+            set => _forwardMotorTorque = value;
+        }
+
+        public float BackwardMotorTorque
+        {
+            get => _backwardMotorTorque;
+            set => _backwardMotorTorque = value;
+        }
+
         public float MaxReturnValue => _maxReturnValue;
-        public float PreventTurnoverForce => _preventTurnoverForce;
+        public float PreventTurnoverForce
+        {
+            get => _preventTurnoverForce;
+            set => _preventTurnoverForce = value;
+        }
+
         public float AirLimit => _airLimit;
-        public float BrakeTorque => brakeTorque;
+        public float BrakeTorque
+        {
+            get => brakeTorque;
+            set => brakeTorque = value;
+        }
 
         public float CrashDuration => _crashDuration;
         // public WheelFrictionValues ForwardFriction => _forwardFriction;

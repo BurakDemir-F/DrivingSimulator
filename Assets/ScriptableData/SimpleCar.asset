@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: SimpleCar
   m_EditorClassIdentifier: 
   _mass: 1000
-  _forwardMotorTorque: 1500
-  _backwardMotorTorque: 1200
-  brakeTorque: 1200
+  _forwardMotorTorque: 815.1642
+  _backwardMotorTorque: 429.91196
+  brakeTorque: 1789.2712
   _maxReturnValue: 20
-  _preventTurnoverForce: 3
+  _preventTurnoverForce: 4346.566
   _airLimit: 0.7
   _crashDuration: 3

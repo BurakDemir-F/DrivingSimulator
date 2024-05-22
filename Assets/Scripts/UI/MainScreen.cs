@@ -48,10 +48,10 @@ namespace UI
         {
             _playButton.GetComponent<Button>().onClick.RemoveListener(PlayButtonClickedHandler);
             _quitBUtton.GetComponent<Button>().onClick.RemoveListener(QuitButtonClickedHandler);
-            foreach (var animatableUI in _uiObjects)
-            {
-                animatableUI.OnTargetReached -= UIElementAnimationEndHandler;
-            }
+            // foreach (var animatableUI in _uiObjects)
+            // {
+            //     animatableUI.OnTargetReached -= UIElementAnimationEndHandler;
+            // }
         }
 
         private void PlayButtonClickedHandler()

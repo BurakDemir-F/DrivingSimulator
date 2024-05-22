@@ -90,5 +90,13 @@ namespace Managers
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        public void SetAllowedCrashCount(int count)
+        {
+            _crashCounter = 0;
+            _allowedCrashCount = count;
+        }
+
+        public int GetAllowedCrashCount() => _allowedCrashCount;
     }
 }
