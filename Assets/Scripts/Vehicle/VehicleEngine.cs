@@ -22,26 +22,8 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
     [SerializeField] private List<Collider> _collliders;
 
     public event Action OnCrash;
-    
-    private void Awake()
-    {
-        Construct();
-        ApplyVehicleData();
-        Activate();
-    }
 
-    private void OnDestroy()
-    {
-        DeActivate();
-        Destruct();
-    }
-
-    public void ApplyVehicleData()
-    {
-        _rigidbody.mass = _vehicleData.Mass;
-    }
-
-    private void Construct()
+    public void Construct()
     {
         _wheels.Construct();
         foreach (var vehicleEffector in _effectors)
@@ -55,16 +37,18 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
         }
         
         _eventBus.Subscribe(VehicleInfoType.Crashed,OnCrashed);
+        ApplyVehicleData();
     }
 
-    private void Destruct()
+    public void Destruct()
     {
+        DeActivate();
         _eventBus.UnSubscribe(VehicleInfoType.Crashed,OnCrashed);
-        foreach (var vehicleEffector in _effectors)
-        {
-            vehicleEffector.DeActivate();
-            vehicleEffector.Destruct();
-        }
+    }
+
+    public void ApplyVehicleData()
+    {
+        _rigidbody.mass = _vehicleData.Mass;
     }
 
     public void Activate()
