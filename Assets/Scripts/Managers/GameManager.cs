@@ -62,9 +62,10 @@ namespace Managers
 
         private void CarCrashedHandler()
         {
-            if (++_crashCounter <= _allowedCrashCount)
+            if (_crashCounter < _allowedCrashCount)
             {
                 _vehicleController.ReAnimate();
+                _crashCounter++;
             }
             else
             {
