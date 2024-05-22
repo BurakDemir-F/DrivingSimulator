@@ -18,9 +18,9 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
     [SerializeField] private VehicleEventBus _eventBus;
     [SerializeField] private List<VehicleEffector> _effectors;
     [SerializeField] private List<VehicleChecker> _checkers;
-    [field:SerializeField] public Transform ReAnimateTransform { get; private set; }
-    [SerializeField] private List<Collider> _collliders;
 
+    private bool _isActivated;
+    
     public event Action OnCrash;
 
     public void Construct()
@@ -58,6 +58,8 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
         
         foreach (var vehicleChecker in _checkers)
             vehicleChecker.Activate();
+
+        _isActivated = true;
     }
     
     public void DeActivate()
@@ -67,10 +69,15 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
         
         foreach (var vehicleChecker in _checkers)
             vehicleChecker.DeActivate();
+
+        _isActivated = false;
     }
 
     private void Update()
     {
+        if(!_isActivated)
+            return;
+        
         foreach (var vehicleChecker in _checkers)
         {
             vehicleChecker.Check();
@@ -79,6 +86,9 @@ public class VehicleEngine : MonoBehaviour, IReAnimatable
 
     private void FixedUpdate()
     {
+        if(!_isActivated)
+            return;
+        
         var horizontalAxis = _inputProvider.HorizontalAxis;
         var verticalAxis = _inputProvider.VerticalAxis;
         var isBrake = _inputProvider.IsBrake;

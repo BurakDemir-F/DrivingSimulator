@@ -17,6 +17,6 @@ MonoBehaviour:
   _backwardMotorTorque: 1200
   brakeTorque: 1200
   _maxReturnValue: 20
-  _preventTurnoverForce: 5000
+  _preventTurnoverForce: 3
   _airLimit: 0.7
   _crashDuration: 3
