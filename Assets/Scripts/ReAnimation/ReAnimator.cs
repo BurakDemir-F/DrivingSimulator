@@ -63,13 +63,9 @@ namespace ReAnimatable
         {
             _snapShots.AddFirst(new TransformSnapShot()
                 { Position = _reAnimatable.GetPosition(), Rotation = _reAnimatable.GetRotation(), IsConstructed = true });
-            Debug.Log($"new item added to snapshots, count:{_snapShots.Count}");
             
             if(_snapShots.Count >= _initialSnapShotAmount)
-            {
                 _snapShots.RemoveLast();
-                Debug.Log($"item removed, count:{_snapShots.Count}");
-            }
         }
 
         private void PlaySnapShots()
