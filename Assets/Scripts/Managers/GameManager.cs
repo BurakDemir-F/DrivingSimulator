@@ -30,6 +30,8 @@ namespace Managers
             _mainScreen.OnPlayGameAnimationsEnd += GameStartHandler;
             _vehicleController.OnCarCrashed += CarCrashedHandler;
             _vehicleController.OnReanimationEnd += ReAnimationEndHandler;
+            _finishAreaController.OnEndCameraAreaEntered += EndCameraAreaEnteredHandler;
+            _finishAreaController.OnGameWin += GameWinHandler;
         }
 
         private void OnDestroy()
